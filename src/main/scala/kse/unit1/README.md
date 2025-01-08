@@ -5,9 +5,9 @@ You are challenged to implement `addition`, `multiplication` and `power` functio
 * functions must be tail-recursive;
 * functions must cover either **non-negative** numbers (regular tasks);
 * or **any (negative including)** numbers (optional tasks);
-* it is allowed to use only `increment`, `decrement`, `isZero`, `isNonNegative`, `abs`, `addition` 
-and `multiplication` functions. It is not allowed to use regular `+`, `*` or `pow`. 
-* it is not allowed to use Scala 2 syntax if Scala 3 syntax is applicable 
+* it is allowed to use only `increment`, `decrement`, `isZero`, `isNonNegative`, `abs`, `addition`
+and `multiplication` functions. It is not allowed to use regular `+`, `*` or `pow`.
+* it is not allowed to use Scala 2 syntax if Scala 3 syntax is applicable
 (i.e. curly braces `{...}` instead of semicolon `:` and tabulations);
 * all tests should pass;
 * github build must be green.
@@ -44,7 +44,7 @@ Review
 ```scala 3
 type Number = BigInt
 ```
-Review 
+Review
 * [Scala type aliases (syntax, examples)](https://alvinalexander.com/scala/scala-type-aliases-syntax-examples/)
 
 ### Require

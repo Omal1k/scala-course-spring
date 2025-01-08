@@ -72,6 +72,10 @@ Follow this [guide](https://www.jetbrains.com/help/idea/github.html) to set up y
 To create a new repository on GitHub, follow this [guide](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository).
 * Ensure the repository is private.
 * Name the repository scala-course-spring to match the original repository name.
+* Add collaborators
+  * [Igor Wolkov](https://github.com/IgorWolkov);
+  * [Ivan Kyrylov](https://github.com/kivanval);
+  * [Yaroslav Sydorenko](https://github.com/yaroslav73).
 
 ### Clone the Course Repository
 To clone the repository, follow this  [guide](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository).
