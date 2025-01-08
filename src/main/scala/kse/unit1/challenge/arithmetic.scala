@@ -4,6 +4,7 @@ import scala.annotation.tailrec
 
 object arithmetic:
 
+
   type Number = Long
 
   val increment: Number => Number =
