@@ -24,8 +24,6 @@ object arithmetic:
       else -value
 
   def addition(left: Number, right: Number): Number =
-    // require(left >= 0, "Left must be non-negative")
-    // require(right >= 0, "Right must be non-negative")
 
     @tailrec
     def saver(left: Number, right: Number): Number =
@@ -38,8 +36,6 @@ object arithmetic:
     saver(left, right)
 
   def multiplication(left: Number, right: Number): Number =
-    // require(left >= 0, "Left must be non-negative")
-    // require(right >= 0, "Right must be non-negative")
 
     @tailrec
     def saver(left: Number, right: Number, acc: Number): Number =
