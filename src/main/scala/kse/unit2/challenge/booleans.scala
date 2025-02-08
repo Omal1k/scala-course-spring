@@ -17,16 +17,22 @@ object booleans:
     case False => True
 
   val conjunction: (Boolean, => Boolean) => Boolean =
-    case (False, _)    => False
-    case (True, value) => value
+    (left, right) =>
+      left match
+        case False => False
+        case True  => right
 
   val disjunction: (Boolean, => Boolean) => Boolean =
-    case (True, _)      => True
-    case (False, value) => value
+    (left, right) =>
+      left match
+        case True  => True
+        case False => right
 
   val implication: (Boolean, => Boolean) => Boolean =
-    case (False, _)    => True
-    case (True, value) => value
+    (left, right) =>
+      left match
+        case False => True
+        case True  => right
 
   val equivalence: (Boolean, => Boolean) => Boolean =
     case (True, True)   => True
