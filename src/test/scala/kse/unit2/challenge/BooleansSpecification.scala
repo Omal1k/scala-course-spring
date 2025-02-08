@@ -37,7 +37,7 @@ object ConjunctionSpecification extends Properties("Conjunction"):
     conjunction(False, value) == False
 
   property("False ∧ value should ignore the second argument") = forAll: (value: Boolean) =>
-    conjunction(False, value) == False
+    (False ∧ (throw DummyError("Should not be thrown"))) == False
 
 end ConjunctionSpecification
 
@@ -46,8 +46,8 @@ object DisjunctionSpecification extends Properties("Disjunction"):
   property("True ∨ value is True") = forAll: (value: Boolean) =>
     disjunction(True, value) == True
 
-  // property("True ∨ value should ignore the second argument") = forAll: (value: Boolean) =>
-  // (True ∨ (throw DummyError("Should not be thrown"))) == True
+  property("True ∨ value should ignore the second argument") = forAll: (value: Boolean) =>
+    (True ∨ (throw DummyError("Should not be thrown"))) == True
 
   property("False ∨ value is value") = forAll: (value: Boolean) =>
     disjunction(False, value) == value
@@ -62,8 +62,8 @@ object ImplicationSpecification extends Properties("Implication"):
   property("False → value is True") = forAll: (value: Boolean) =>
     implication(False, value) == True
 
-  // property("False → value should ignore the second argument") = forAll: (value: Boolean) =>
-  // (False → (throw DummyError("Should not be thrown"))) == True
+  property("False → value should ignore the second argument") = forAll: (value: Boolean) =>
+    (False → (throw DummyError("Should not be thrown"))) == True
 
 end ImplicationSpecification
 
@@ -118,6 +118,9 @@ object AxiomsSpecification extends Properties("Axioms"):
 
   property("a ∨ !a") = forAll: (a: Boolean) =>
     a ∨ !a == True
+
+  property("a ↔ b == b ↔ a") = forAll: (a: Boolean, b: Boolean) =>
+    (a ↔ b) == (b ↔ a)
 
 end AxiomsSpecification
 
