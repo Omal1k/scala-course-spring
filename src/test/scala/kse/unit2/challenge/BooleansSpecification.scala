@@ -1,6 +1,7 @@
 package kse.unit2.challenge
 
 import kse.model.DummyError
+import kse.unit2.challenge.AxiomsSpecification.property
 import kse.unit2.challenge.booleans.{implication, *}
 import kse.unit2.challenge.generators.given
 import org.scalacheck.*
@@ -82,6 +83,9 @@ object EquivalenceSpecification extends Properties("Equivalence"):
   property("False ↔ True is False") = propBoolean:
     False ↔ True == False
 
+  property("a ↔ b == b ↔ a") = forAll: (a: Boolean, b: Boolean) =>
+    (a ↔ b) == (b ↔ a)
+
 end EquivalenceSpecification
 
 object AxiomsSpecification extends Properties("Axioms"):
@@ -119,8 +123,10 @@ object AxiomsSpecification extends Properties("Axioms"):
   property("a ∨ !a") = forAll: (a: Boolean) =>
     a ∨ !a == True
 
-  property("a ↔ b == b ↔ a") = forAll: (a: Boolean, b: Boolean) =>
-    (a ↔ b) == (b ↔ a)
+  property("a ↔ a == True") = forAll: (a: Boolean) =>
+    a ↔ a == True
+
+  
 
 end AxiomsSpecification
 
