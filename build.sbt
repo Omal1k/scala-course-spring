@@ -10,5 +10,5 @@ lazy val root = project
     libraryDependencies += "org.scalameta"  %% "munit"            % "1.0.0"  % Test,
     libraryDependencies += "org.scalameta"  %% "munit-scalacheck" % "1.0.0"  % Test,
     testFrameworks += new TestFramework("munit.Framework"),
-    scalacOptions += "-Xfatal-warnings",
+    scalacOptions ++= Seq("-Xfatal-warnings", "-Yexplicit-nulls"),
   )

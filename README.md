@@ -1,6 +1,6 @@
 ## Functional Programing Course at KSE
 
-# Scala Course Autumn
+# Scala Course Spring
 
 ## Documentation and Resources
 * [Scala 3 Reference](https://docs.scala-lang.org/scala3/reference/)
@@ -40,12 +40,16 @@ Students may submit incomplete homework to verify assumptions, but any incomplet
 The project uses [scalafmt](https://scalameta.org/scalafmt/) as the code formatter for Scala.
 All code must be formatted using scalafmt after each commit.
 
+# Prerequisites
+
 # How to start
-1. Create a GitHub account (if you don’t already have one). 
-2. Set up a private GitHub repository. 
-3. Clone the repository locally (do not fork it). 
-4. Push the local repository to your private GitHub repository. 
-5. Create a new branch for each challenge assignment.
+1. Install [Git](https://git-scm.com/downloads) on your local machine if needed.
+2. Install [Sbt](https://www.scala-sbt.org/download/) on your local machine if needed.
+3. Create a GitHub account (if you don’t already have one).
+4. Set up a private GitHub repository.
+5. Clone the repository locally (do not fork it).
+6. Push the local repository to your private GitHub repository.
+7. Create a new branch for each challenge assignment.
 
 ### Create GitHub account
 Open https://github.com/ and follow the sign-up procedure.
@@ -229,7 +233,7 @@ test
 ```
 in the `sbt` shell.
 
-The failure occurs because the `test` command runs all tests in the project. 
+The failure occurs because the `test` command runs all tests in the project.
 Since some homework tests have not been implemented yet, this results in a failure.
 
 ### Single test execution
@@ -243,7 +247,7 @@ in the commandline, or
 testOnly <path to the test>
 ```
 
-in the `sbt` shell, 
+in the `sbt` shell,
 
 For example to execute `FunctionsSpecification` from Unit 1 `topic` run the following command
 
@@ -441,10 +445,10 @@ Students not allowed to commit any changes to `main` branch except the cases des
   * `unit-2` for Unit 2
 
     ...
-  
+
   * `unit-n` for Unit n
 
-The name convention is used in the GitHub Actions build setup to run the only tests related 
+The name convention is used in the GitHub Actions build setup to run the only tests related
 to a certain unit. Violating of the conventions leads to failed builds.
 
 
