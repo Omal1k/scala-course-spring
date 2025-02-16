@@ -82,6 +82,12 @@ object EquivalenceSpecification extends Properties("Equivalence"):
   property("False ↔ True is False") = propBoolean:
     False ↔ True == False
 
+  property("True ↔ value = value") = forAll: (value: Boolean) =>
+    True ↔ value == value
+
+  property("False ↔ value = !value") = forAll: (value: Boolean) =>
+    False ↔ value == !value
+
   property("a ↔ b == b ↔ a") = forAll: (a: Boolean, b: Boolean) =>
     (a ↔ b) == (b ↔ a)
 
