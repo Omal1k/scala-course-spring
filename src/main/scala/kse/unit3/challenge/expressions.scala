@@ -60,9 +60,11 @@ object expressions:
     override def toString: String = s"$left ∨ $right"
 
   case class Implication(left: Expression, right: Expression) extends Expression:
-    def evaluate: Expression                                                 = ???
-    def substitute(variable: Variable, substitution: Expression): Expression = ???
-    override def toString: String                                            = ???
+    lazy val evaluate: Expression = Disjunction(Negation(left), right).evaluate
+
+    def substitute(variable: Variable, substitution: Expression): Expression =
+      Implication(left.substitute(variable, substitution), right.substitute(variable, substitution))
+    override def toString: String = s"$left → $right"
 
   case class Equivalence(left: Expression, right: Expression) extends Expression:
     def evaluate: Expression                                                 = ???
