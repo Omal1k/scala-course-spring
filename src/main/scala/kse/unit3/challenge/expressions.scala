@@ -28,10 +28,11 @@ object expressions:
 
   case class Negation(expression: Expression) extends Expression:
 
-    lazy val evaluate: Expression = expression.evaluate match
-      case True  => False
-      case False => True
-      case other => Negation(other)
+    lazy val evaluate: Expression =
+      expression.evaluate match
+        case True  => False
+        case False => True
+        case other => Negation(other)
 
     def substitute(variable: Variable, substitution: Expression): Expression =
       Negation(expression.substitute(variable, substitution))
@@ -39,10 +40,11 @@ object expressions:
 
   case class Conjunction(left: Expression, right: Expression) extends Expression:
 
-    lazy val evaluate: Expression = (left.evaluate, right.evaluate) match
-      case (True, True)            => True
-      case (False, _) | (_, False) => False
-      case (left, right)           => Conjunction(left, right)
+    lazy val evaluate: Expression =
+      (left.evaluate, right.evaluate) match
+        case (True, True)            => True
+        case (False, _) | (_, False) => False
+        case (left, right)           => Conjunction(left, right)
 
     def substitute(variable: Variable, substitution: Expression): Expression =
       Conjunction(left.substitute(variable, substitution), right.substitute(variable, substitution))
@@ -50,10 +52,11 @@ object expressions:
 
   case class Disjunction(left: Expression, right: Expression) extends Expression:
 
-    lazy val evaluate: Expression = (left.evaluate, right.evaluate) match
-      case (True, _) | (_, True) => True
-      case (False, False)        => False
-      case (left, right)         => Disjunction(left, right)
+    lazy val evaluate: Expression =
+      (left.evaluate, right.evaluate) match
+        case (True, _) | (_, True) => True
+        case (False, False)        => False
+        case (left, right)         => Disjunction(left, right)
 
     def substitute(variable: Variable, substitution: Expression): Expression =
       Disjunction(left.substitute(variable, substitution), right.substitute(variable, substitution))
@@ -67,9 +70,11 @@ object expressions:
     override def toString: String = s"$left → $right"
 
   case class Equivalence(left: Expression, right: Expression) extends Expression:
-    def evaluate: Expression                                                 = ???
-    def substitute(variable: Variable, substitution: Expression): Expression = ???
-    override def toString: String                                            = ???
+    lazy val evaluate: Expression = Conjunction(Implication(left, right), Implication(right, left)).evaluate
+
+    def substitute(variable: Variable, substitution: Expression): Expression =
+      Equivalence(left.substitute(variable, substitution), right.substitute(variable, substitution))
+    override def toString: String = s"$left ↔ $right"
 
   given Conversion[String, Variable] with
     def apply(str: String): Variable = Variable(str)
@@ -77,16 +82,16 @@ object expressions:
   extension (expr: Expression)
 
     @targetName("negation")
-    infix def unary_! : Negation = ???
+    infix def unary_! : Negation = Negation(expr)
 
     @targetName("conjunction")
-    infix def ∧(that: Expression): Conjunction = ???
+    infix def ∧(that: Expression): Conjunction = Conjunction(expr, that)
 
     @targetName("disjunction")
-    infix def ∨(that: Expression): Disjunction = ???
+    infix def ∨(that: Expression): Disjunction = Disjunction(expr, that)
 
     @targetName("implication")
-    infix def →(that: Expression): Implication = ???
+    infix def →(that: Expression): Implication = Implication(expr, that)
 
     @targetName("equivalence")
-    infix def ↔(that: Expression): Equivalence = ???
+    infix def ↔(that: Expression): Equivalence = Equivalence(expr, that)
