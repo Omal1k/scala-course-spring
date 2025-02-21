@@ -23,16 +23,17 @@ object expressions:
     val evaluate: Expression = this
 
     def substitute(variable: Variable, expression: Expression): Expression =
-      if this == Variable then expression
+      if this == variable then expression
       else this
 
   case class Negation(expression: Expression) extends Expression:
 
     lazy val evaluate: Expression =
       expression.evaluate match
-        case True  => False
-        case False => True
-        case other => Negation(other)
+        case True            => False
+        case False           => True
+        case Negation(value) => value.evaluate
+        case other           => Negation(other.evaluate)
 
     def substitute(variable: Variable, substitution: Expression): Expression =
       Negation(expression.substitute(variable, substitution))
@@ -42,7 +43,8 @@ object expressions:
 
     lazy val evaluate: Expression =
       (left.evaluate, right.evaluate) match
-        case (True, True)            => True
+        case (True, expr)            => expr
+        case (expr, True)            => expr
         case (False, _) | (_, False) => False
         case (left, right)           => Conjunction(left, right)
 
@@ -55,7 +57,8 @@ object expressions:
     lazy val evaluate: Expression =
       (left.evaluate, right.evaluate) match
         case (True, _) | (_, True) => True
-        case (False, False)        => False
+        case (False, expr)         => expr
+        case (expr, False)         => expr
         case (left, right)         => Disjunction(left, right)
 
     def substitute(variable: Variable, substitution: Expression): Expression =
@@ -63,14 +66,14 @@ object expressions:
     override def toString: String = s"$left ∨ $right"
 
   case class Implication(left: Expression, right: Expression) extends Expression:
-    lazy val evaluate: Expression = Disjunction(Negation(left), right).evaluate
+    lazy val evaluate: Expression = Disjunction(Negation(left).evaluate, right.evaluate).evaluate
 
     def substitute(variable: Variable, substitution: Expression): Expression =
       Implication(left.substitute(variable, substitution), right.substitute(variable, substitution))
     override def toString: String = s"$left → $right"
 
   case class Equivalence(left: Expression, right: Expression) extends Expression:
-    lazy val evaluate: Expression = Conjunction(Implication(left, right), Implication(right, left)).evaluate
+    lazy val evaluate: Expression = Conjunction(Implication(left, right).evaluate, Implication(right, left).evaluate).evaluate
 
     def substitute(variable: Variable, substitution: Expression): Expression =
       Equivalence(left.substitute(variable, substitution), right.substitute(variable, substitution))

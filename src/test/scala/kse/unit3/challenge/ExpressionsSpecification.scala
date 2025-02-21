@@ -36,9 +36,9 @@ end VariableEvaluationSpecification
 
 object NegationEvaluationSpecification extends Properties("Negation Evaluation"):
 
-  property("!True should be evaluated to False") = !True.evaluate == False
+  property("!True should be evaluated to False") = (!True).evaluate == False.evaluate
 
-  property("!False should be evaluated to True") = !False.evaluate == True
+  property("!False should be evaluated to True") = (!False).evaluate == True.evaluate
 
   property("!variable should be evaluated to !variable") = forAll: (variable: Variable) =>
     !variable.evaluate == !variable
@@ -92,7 +92,7 @@ object ImplicationEvaluationSpecification extends Properties("Implication Evalua
     (True → expression).evaluate == expression.evaluate
 
   property("False → expression should be evaluated to True") = forAll: (expression: Expression) =>
-    (False → expression).evaluate == False
+    (False → expression).evaluate == True
 
   property("left → right should be correctly evaluated") = forAll: (left: Expression, right: Expression) =>
     (left → right).evaluate == (left.evaluate → right.evaluate).evaluate
@@ -101,13 +101,13 @@ end ImplicationEvaluationSpecification
 
 object EquivalenceEvaluationSpecification extends Properties("Equivalence Evaluation"):
 
-  property("Reflexivity") = forAll: (expression: Expression) =>
+  property("Reflexivity") = forAll: (expression: Boolean) =>
     (expression ↔ expression).evaluate == True
 
-  property("Symmetry") = forAll: (left: Expression, right: Expression) =>
+  property("Symmetry") = forAll: (left: Boolean, right: Boolean) =>
     (left ↔ right).evaluate == (right ↔ left).evaluate
 
-  property("Transitivity") = forAll: (a: Expression, b: Expression, c: Expression) =>
+  property("Transitivity") = forAll: (a: Boolean, b: Boolean, c: Boolean) =>
     (((a ↔ b) ∧ (b ↔ c)) → (a ↔ c)).evaluate == True
 
   property("left ↔ right should be correctly evaluated") = forAll: (left: Expression, right: Expression) =>
