@@ -1,6 +1,5 @@
 package kse.unit3.challenge
 
-import java.beans.Expression
 import scala.annotation.{tailrec, targetName}
 
 object expressions:
@@ -30,10 +29,9 @@ object expressions:
 
     lazy val evaluate: Expression =
       expression.evaluate match
-        case True            => False
-        case False           => True
-        case Negation(value) => value.evaluate
-        case other           => Negation(other.evaluate)
+        case True  => False
+        case False => True
+        case other => Negation(other.evaluate)
 
     def substitute(variable: Variable, substitution: Expression): Expression =
       Negation(expression.substitute(variable, substitution))
@@ -50,7 +48,7 @@ object expressions:
 
     def substitute(variable: Variable, substitution: Expression): Expression =
       Conjunction(left.substitute(variable, substitution), right.substitute(variable, substitution))
-    override def toString: String = s"$left ∧ $right"
+    override def toString: String = s"($left ∧ $right)"
 
   case class Disjunction(left: Expression, right: Expression) extends Expression:
 
@@ -63,21 +61,21 @@ object expressions:
 
     def substitute(variable: Variable, substitution: Expression): Expression =
       Disjunction(left.substitute(variable, substitution), right.substitute(variable, substitution))
-    override def toString: String = s"$left ∨ $right"
+    override def toString: String = s"($left ∨ $right)"
 
   case class Implication(left: Expression, right: Expression) extends Expression:
     lazy val evaluate: Expression = Disjunction(Negation(left).evaluate, right.evaluate).evaluate
 
     def substitute(variable: Variable, substitution: Expression): Expression =
       Implication(left.substitute(variable, substitution), right.substitute(variable, substitution))
-    override def toString: String = s"$left → $right"
+    override def toString: String = s"($left → $right)"
 
   case class Equivalence(left: Expression, right: Expression) extends Expression:
     lazy val evaluate: Expression = Conjunction(Implication(left, right).evaluate, Implication(right, left).evaluate).evaluate
 
     def substitute(variable: Variable, substitution: Expression): Expression =
       Equivalence(left.substitute(variable, substitution), right.substitute(variable, substitution))
-    override def toString: String = s"$left ↔ $right"
+    override def toString: String = s"($left ↔ $right)"
 
   given Conversion[String, Variable] with
     def apply(str: String): Variable = Variable(str)
