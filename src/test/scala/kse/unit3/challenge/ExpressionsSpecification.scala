@@ -36,9 +36,9 @@ end VariableEvaluationSpecification
 
 object NegationEvaluationSpecification extends Properties("Negation Evaluation"):
 
-  property("!True should be evaluated to False") = (!True).evaluate == False.evaluate
+  property("!True should be evaluated to False") = (!True).evaluate == False
 
-  property("!False should be evaluated to True") = (!False).evaluate == True.evaluate
+  property("!False should be evaluated to True") = (!False).evaluate == True
 
   property("!variable should be evaluated to !variable") = forAll: (variable: Variable) =>
     (!variable).evaluate == !variable
