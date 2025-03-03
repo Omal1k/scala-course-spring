@@ -90,5 +90,5 @@ object numerals:
     override def toString: String = s"Nat($toInt)"
 
     override def equals(obj: Any): Boolean = obj match
-      case s: Successor => this.predecessor == s.predecessor
+      case s: Successor => this.predecessor.equals(s.predecessor)
       case _            => false
