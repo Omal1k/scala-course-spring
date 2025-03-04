@@ -82,8 +82,8 @@ object numerals:
     // Optional
     @targetName("subtraction")
     infix def -(that: Numeral): Numeral = that match
-      case value if value.isZero => this
-      case s: Successor          => this.predecessor - s.predecessor
+      case Zero         => this
+      case s: Successor => this.predecessor - s.predecessor
 
     def toInt: Int = 1 + n.toInt
 
