@@ -41,7 +41,7 @@ object numerals:
 
     def isZero: Boolean = true
 
-    def predecessor: Numeral = throw new NoSuchElementException("Zero does not have predecessor in church numerals")
+    def predecessor: Numeral = Zero
 
     @targetName("greater than")
     infix def >(that: Numeral): Boolean = false
@@ -53,11 +53,11 @@ object numerals:
     @targetName("subtraction")
     infix def -(that: Numeral): Numeral = that match
       case Zero => this
-      case _    => throw new UnsupportedOperationException("Cannot substract from 0 in church numerals")
+      case _    => Zero
 
     def toInt: Int = 0
 
-    override def toString: String = s"Nat($toInt)"
+    override def toString: String = "Zero"
 
     override def equals(obj: Any): Boolean = obj match
       case value: Zero.type => true
@@ -74,7 +74,8 @@ object numerals:
 
     @targetName("greater than")
     infix def >(that: Numeral): Boolean = that match
-      case Zero => false
+      case Zero         => true
+      case s: Successor => n > s.predecessor
 
     @targetName("addition")
     infix def +(that: Numeral): Numeral = Successor(n + that)
@@ -87,7 +88,7 @@ object numerals:
 
     def toInt: Int = 1 + n.toInt
 
-    override def toString: String = s"Nat($toInt)"
+    override def toString: String = s"Successor(${predecessor.toString}"
 
     override def equals(obj: Any): Boolean = obj match
       case s: Successor => this.predecessor.equals(s.predecessor)

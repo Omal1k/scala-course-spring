@@ -11,31 +11,42 @@ object NumeralsSpecification extends Properties("Numerals"):
   override def overrideParameters(p: Parameters): Parameters =
     p.withMinSuccessfulTests(50).withMaxDiscardRatio(100)
 
-  property("Zero == Zero") = (Zero == Zero)
-
   property("Zero < value") = forAll: (value: Numeral) =>
-    if value.isZero then (Zero < value) == false
-    else (Zero < value) == true
+    (Zero < value) == !value.isZero
 
   property("succesor(n) == n+1") = forAll: (value: Numeral) =>
-    value.successor.toInt == value.toInt + 1
+    value.successor == value + Successor(Zero)
+
+  property("predecessor(successor(value)) == value") = forAll: (value: Numeral) =>
+    value.successor.predecessor == value
 
   property("value + 0 == value") = forAll: (value: Numeral) =>
     value + Zero == value
 
+  property("0 + value == value") = forAll: (value: Numeral) =>
+    Zero + value == value
+
   property("left + right == right + left") = forAll: (left: Numeral, right: Numeral) =>
     left + right == right + left
 
-  property("a+(b+c) == (a+b)+c") = forAll: (a: Numeral, b: Numeral, c: Numeral) =>
-    (a + (b + c)).toInt == ((a + b) + c).toInt
+  property("a + (b + c) == (a + b) + c") = forAll: (a: Numeral, b: Numeral, c: Numeral) =>
+    (a + (b + c)) == ((a + b) + c)
 
   property("reflexivity") = forAll: (left: Numeral, right: Numeral) =>
-    (left.toInt == right.toInt) == (left == right)
+    (left == right) == (left == right)
 
-  property("left - right == left - right") = forAll: (left: Numeral, right: Numeral) =>
-    try (left.toInt - right.toInt) == (left - right).toInt
-    catch case e: UnsupportedOperationException => true
+  property("symmetry") = forAll: (left: Numeral, right: Numeral) =>
+    (left == right) == (right == left)
+
+  property("transitivity") = forAll: (a: Numeral, b: Numeral, c: Numeral) =>
+    (!((a == b) && (b == c))) || (a == c)
 
   property("value - zero == value") = forAll: (value: Numeral) =>
     (value - Zero) == value
+
+  property("value - value == zero") = forAll: (value: Numeral) =>
+    (value - value) == Zero
+
+  property("a - b not negative") = forAll: (a: Numeral, b: Numeral) =>
+    (a - b).isZero || (a >= b)
 end NumeralsSpecification
