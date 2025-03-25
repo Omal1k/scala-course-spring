@@ -1,5 +1,6 @@
 package kse.unit6.challenge
 
+import javax.xml.transform.Templates
 import kse.unit4.challenge.generators.given
 import kse.unit4.challenge.numerals.Numeral
 import kse.unit6.algebra.{*, given}
@@ -19,9 +20,9 @@ end GeneralSetSpecification
 
 object EmptySpecification extends Properties("Empty set laws"):
 
-  property("Universal quantifier applied to the empty set should return true for any predicate") = ???
+  property("Universal quantifier applied to the empty set should return true for any predicate") = Empty.forAll(_ => false)
 
-  property("Existential quantifier applied to the empty set should return false for any predicate") = ???
+  property("Existential quantifier applied to the empty set should return false for any predicate") = !Empty.exists(_ => false)
 
   property("Empty set should not contain any element") = forAll: (numeral: Numeral) =>
     ???
