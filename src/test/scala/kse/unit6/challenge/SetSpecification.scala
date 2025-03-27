@@ -1,6 +1,5 @@
 package kse.unit6.challenge
 
-import javax.xml.transform.Templates
 import kse.unit4.challenge.generators.given
 import kse.unit4.challenge.numerals.Numeral
 import kse.unit6.algebra.{*, given}
