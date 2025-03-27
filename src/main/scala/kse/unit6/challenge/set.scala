@@ -16,7 +16,7 @@ object set:
     infix def include[B >: A: Order](x: B): Set[B]
 
     // Optional from the Unit 5. If you haven't implement it in Unit 5 then skip it
-    //    infix def remove[B >: A: Order](x: B): Set[B]
+    infix def remove[B >: A: Order](x: B): Set[B]
 
     @targetName("union")
     infix def ∪[B >: A: Order](that: Set[B]): Set[B]
@@ -25,12 +25,12 @@ object set:
     infix def ∩[B >: A: Order](that: Set[B]): Set[B]
 
     // Optional from the Unit 5. If you haven't implement it in Unit 5 then skip it
-    //    @targetName("difference")
-    //    infix def \[B >: A: Order](that: Set[B]): Set[B]
+    @targetName("difference")
+    infix def \[B >: A: Order](that: Set[B]): Set[B]
 
     // Optional from the Unit 5. If you haven't implement it in Unit 5 then skip it
-    //    @targetName("symmetric difference")
-    //    infix def ∆[B >: A: Order](that: Set[B]): Set[B] = ???
+    @targetName("symmetric difference")
+    infix def ∆[B >: A: Order](that: Set[B]): Set[B] = (this \ that) ∪ (that \ this)
 
   end Set
 
@@ -48,7 +48,7 @@ object set:
     infix def include[B: Order](x: B): Set[B] = NonEmpty(Empty, x, Empty)
 
     // Optional from the Unit 5. If you haven't implement it in Unit 5 then skip it
-    //    infix def remove[B: Order](x: B): Set[B] = ???
+    infix def remove[B: Order](x: B): Set[B] = this
 
     @targetName("union")
     infix def ∪[B: Order](that: Set[B]): Set[B] = that
@@ -57,8 +57,8 @@ object set:
     infix def ∩[B: Order](that: Set[B]): Set[B] = Empty
 
     // Optional from the Unit 5. If you haven't implement it in Unit 5 then skip it
-    //    @targetName("difference")
-    //    infix def \[B: Order](that: Set[B]): Set[B] = ???
+    @targetName("difference")
+    infix def \[B: Order](that: Set[B]): Set[B] = this
 
     override def toString: String = "[*]"
 
@@ -88,7 +88,10 @@ object set:
       else NonEmpty(left.include(x), element, right)
 
     // Optional from the Unit 5. If you haven't implement it in Unit 5 then skip it
-    //    infix def remove[B >: A: Order](x: B): Set[B] = ???
+    infix def remove[B >: A: Order](x: B): Set[B] =
+      if x == element then left ∪ right
+      else if x > element then NonEmpty(left, element, right remove x)
+      else NonEmpty(left remove x, element, right)
 
     @targetName("union")
     infix def ∪[B >: A: Order](that: Set[B]): Set[B] = left ∪ (right ∪ that.include(element))
@@ -99,8 +102,10 @@ object set:
       else (left ∩ that) ∪ (right ∩ that)
 
     // Optional from the Unit 5. If you haven't implement it in Unit 5 then skip it
-    //    @targetName("difference")
-    //    infix def \[B >: A: Order](that: Set[B]): Set[B] = ???
+    @targetName("difference")
+    infix def \[B >: A: Order](that: Set[B]): Set[B] =
+      if that contains element then (left \ that) ∪ (right \ that)
+      else NonEmpty(left \ that, element, right \ that)
 
     override def toString: String = s"[$left - [$element] - $right]"
 
