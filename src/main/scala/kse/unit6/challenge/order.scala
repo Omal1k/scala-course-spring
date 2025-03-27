@@ -16,6 +16,6 @@ object order:
   given Order[Numeral] with
 
     def compare(left: Numeral, right: Numeral): Int =
-      if left == right then 0
-      else if left < right then -1
-      else 1
+      if left < right then -1
+      else if left > right then 1
+      else 0
