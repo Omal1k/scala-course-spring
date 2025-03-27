@@ -67,6 +67,8 @@ object set:
         case _: Empty.type => true
         case _             => false
 
+    override def hashCode(): Int = 0
+
   end Empty
 
   case class NonEmpty[A](left: Set[A], element: A, right: Set[A]) extends Set[A]:
@@ -114,4 +116,5 @@ object set:
         case s @ NonEmpty(left, v, right) => s.forAll(element => this.exists(_ == element))
         case _                            => false
 
+    override def hashCode(): Int = (left, element, right).hashCode()
   end NonEmpty
