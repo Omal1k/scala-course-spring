@@ -68,6 +68,8 @@ object set:
 
     override def equals(obj: Any): Boolean = obj.isInstanceOf[Empty]
 
+    override def hashCode(): Int = 0
+
   end Empty
 
   case class NonEmpty(left: NumeralSet, element: Numeral, right: NumeralSet) extends NumeralSet:
@@ -116,6 +118,8 @@ object set:
       obj match
         case set: NonEmpty => this.forAll(set.contains) && set.forAll(this.contains)
         case _             => false
+
+    override def hashCode(): Int = (left, element, right).hashCode()
   end NonEmpty
 
 end set

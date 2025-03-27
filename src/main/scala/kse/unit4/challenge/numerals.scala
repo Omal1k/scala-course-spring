@@ -63,6 +63,8 @@ object numerals:
       case value: Zero.type => true
       case _                => false
 
+    override def hashCode(): Int = 0
+
   object Successor:
     def unapply(successor: Successor): Option[Numeral] = Option(successor.predecessor)
 
@@ -93,3 +95,5 @@ object numerals:
     override def equals(obj: Any): Boolean = obj match
       case s: Successor => this.predecessor.equals(s.predecessor)
       case _            => false
+
+    override def hashCode(): Int = toInt.hashCode() + 1
