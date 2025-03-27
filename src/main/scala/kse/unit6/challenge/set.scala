@@ -64,8 +64,8 @@ object set:
 
     override def equals(obj: Any): Boolean =
       obj match
-        case Empty => true
-        case _     => false
+        case _: Empty.type => true
+        case _             => false
 
   end Empty
 
