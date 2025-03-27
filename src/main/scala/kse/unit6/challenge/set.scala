@@ -1,112 +1,109 @@
-package kse.unit5.challenge
+package kse.unit6.challenge
 
-import kse.unit4.challenge.numerals.Numeral
+import kse.unit6.challenge.order.{Order, *, given}
 import scala.annotation.targetName
 
 object set:
 
-  trait NumeralSet:
+  trait Set[+A]:
 
-    infix def forAll(predicate: Numeral => Boolean): Boolean
+    infix def forAll(predicate: A => Boolean): Boolean
 
-    infix def exists(predicate: Numeral => Boolean): Boolean
+    infix def exists(predicate: A => Boolean): Boolean
 
-    infix def contains(x: Numeral): Boolean
+    infix def contains[B >: A: Order](x: B): Boolean
 
-    infix def include(x: Numeral): NumeralSet
+    infix def include[B >: A: Order](x: B): Set[B]
 
-    // Optional
-    // Uncomment if needed
-    infix def remove(x: Numeral): NumeralSet
+    // Optional from the Unit 5. If you haven't implement it in Unit 5 then skip it
+    infix def remove[B >: A: Order](x: B): Set[B]
 
     @targetName("union")
-    infix def ∪(that: NumeralSet): NumeralSet
+    infix def ∪[B >: A: Order](that: Set[B]): Set[B]
 
     @targetName("intersection")
-    infix def ∩(that: NumeralSet): NumeralSet
+    infix def ∩[B >: A: Order](that: Set[B]): Set[B]
 
-    // Optional
-    // Uncomment if needed
+    // Optional from the Unit 5. If you haven't implement it in Unit 5 then skip it
     @targetName("difference")
-    infix def \(that: NumeralSet): NumeralSet
+    infix def \[B >: A: Order](that: Set[B]): Set[B]
 
-    // Optional
-    // Uncomment if needed
+    // Optional from the Unit 5. If you haven't implement it in Unit 5 then skip it
     @targetName("symmetric difference")
-    infix def ∆(that: NumeralSet): NumeralSet = (this \ that) ∪ (that \ this)
+    infix def ∆[B >: A: Order](that: Set[B]): Set[B] = (this \ that) ∪ (that \ this)
 
-  end NumeralSet
+  end Set
 
   type Empty = Empty.type
 
-  case object Empty extends NumeralSet:
+  // TODO: Remind about type system
+  case object Empty extends Set[Nothing]:
 
-    infix def forAll(predicate: Numeral => Boolean): Boolean = true
+    infix def forAll(predicate: Nothing => Boolean): Boolean = true
 
-    infix def exists(predicate: Numeral => Boolean): Boolean = false
+    infix def exists(predicate: Nothing => Boolean): Boolean = false
 
-    infix def contains(x: Numeral): Boolean = false
+    infix def contains[B: Order](x: B): Boolean = false
 
-    infix def include(x: Numeral): NumeralSet = NonEmpty(Empty, x, Empty)
+    infix def include[B: Order](x: B): Set[B] = NonEmpty(Empty, x, Empty)
 
-    // Optional
-    // Uncomment if needed
-    infix def remove(x: Numeral): NumeralSet = this
+    // Optional from the Unit 5. If you haven't implement it in Unit 5 then skip it
+    infix def remove[B: Order](x: B): Set[B] = this
 
     @targetName("union")
-    infix def ∪(that: NumeralSet): NumeralSet = that
+    infix def ∪[B: Order](that: Set[B]): Set[B] = that
 
     @targetName("intersection")
-    infix def ∩(that: NumeralSet): NumeralSet = this
+    infix def ∩[B: Order](that: Set[B]): Set[B] = Empty
 
-    // Optional
-    // Uncomment if needed
+    // Optional from the Unit 5. If you haven't implement it in Unit 5 then skip it
     @targetName("difference")
-    infix def \(that: NumeralSet): NumeralSet = this
+    infix def \[B: Order](that: Set[B]): Set[B] = this
 
     override def toString: String = "[*]"
 
-    override def equals(obj: Any): Boolean = obj.isInstanceOf[Empty]
+    override def equals(obj: Any): Boolean =
+      obj match
+        case _: Empty.type => true
+        case _             => false
 
   end Empty
 
-  case class NonEmpty(left: NumeralSet, element: Numeral, right: NumeralSet) extends NumeralSet:
+  case class NonEmpty[A](left: Set[A], element: A, right: Set[A]) extends Set[A]:
 
-    infix def forAll(predicate: Numeral => Boolean): Boolean =
-      (left forAll predicate) && predicate(element) && (right forAll predicate)
+    infix def forAll(predicate: A => Boolean): Boolean =
+      left.forAll(predicate) && predicate(element) && right.forAll(predicate)
 
-    infix def exists(predicate: Numeral => Boolean): Boolean =
-      (left exists predicate) || predicate(element) || (right exists predicate)
+    infix def exists(predicate: A => Boolean): Boolean =
+      left.exists(predicate) || predicate(element) || right.exists(predicate)
 
-    infix def contains(x: Numeral): Boolean =
+    infix def contains[B >: A: Order](x: B): Boolean =
       if x == element then true
-      else if x > element then right contains x
-      else left contains x
+      else if x > element then right.contains(x)
+      else left.contains(x)
 
-    infix def include(x: Numeral): NumeralSet =
+    infix def include[B >: A: Order](x: B): Set[B] =
       if x == element then this
-      else if x > element then NonEmpty(left, element, right include x)
-      else NonEmpty(left include x, element, right)
+      else if x > element then NonEmpty(left, element, right.include(x))
+      else NonEmpty(left.include(x), element, right)
 
-    // Optional
-    // Uncomment if needed
-    infix def remove(x: Numeral): NumeralSet =
+    // Optional from the Unit 5. If you haven't implement it in Unit 5 then skip it
+    infix def remove[B >: A: Order](x: B): Set[B] =
       if x == element then left ∪ right
       else if x > element then NonEmpty(left, element, right remove x)
       else NonEmpty(left remove x, element, right)
 
     @targetName("union")
-    infix def ∪(that: NumeralSet): NumeralSet = left ∪ (right ∪ (that include element))
+    infix def ∪[B >: A: Order](that: Set[B]): Set[B] = left ∪ (right ∪ that.include(element))
 
     @targetName("intersection")
-    infix def ∩(that: NumeralSet): NumeralSet =
-      if that contains element then NonEmpty(left ∩ that, element, right ∩ that)
+    infix def ∩[B >: A: Order](that: Set[B]): Set[B] =
+      if that.contains(element) then NonEmpty(left ∩ that, element, right ∩ that)
       else (left ∩ that) ∪ (right ∩ that)
 
-    // Optional
-    // Uncomment if needed
+    // Optional from the Unit 5. If you haven't implement it in Unit 5 then skip it
     @targetName("difference")
-    infix def \(that: NumeralSet): NumeralSet =
+    infix def \[B >: A: Order](that: Set[B]): Set[B] =
       if that contains element then (left \ that) ∪ (right \ that)
       else NonEmpty(left \ that, element, right \ that)
 
@@ -114,8 +111,7 @@ object set:
 
     override def equals(obj: Any): Boolean =
       obj match
-        case set: NonEmpty => this.forAll(set.contains) && set.forAll(this.contains)
-        case _             => false
-  end NonEmpty
+        case s @ NonEmpty(left, v, right) => s.forAll(element => this.exists(_ == element))
+        case _                            => false
 
-end set
+  end NonEmpty
